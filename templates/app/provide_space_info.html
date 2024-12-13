@@ -1,0 +1,170 @@
+{% extends "base/base.html" %} {% block content %}
+<div class="container py-3 text-white fw-bold">
+  <h1 class="text-center mb-4">Enter Space Details</h1>
+  <form method="post" class="needs-validation" novalidate>
+    {% csrf_token %}
+
+    <!-- Space ID -->
+    <div class="mb-3">
+      <label for="{{ form.space_id.id_for_label }}" class="form-label"
+        >{{ form.space_id.label }}</label
+      >
+      <input
+        type="number"
+        class="form-control"
+        id="{{ form.space_id.id_for_label }}"
+        name="{{ form.space_id.name }}"
+        value="{{ form.space_id.value|default_if_none:'' }}"
+        required
+      />
+    </div>
+
+    <!-- Space Details -->
+    <div class="mb-3">
+      <label for="{{ form.space_details.id_for_label }}" class="form-label"
+        >{{ form.space_details.label }}</label
+      >
+      <textarea
+        class="form-control"
+        id="{{ form.space_details.id_for_label }}"
+        name="{{ form.space_details.name }}"
+        rows="3"
+      >
+{{ form.space_details.value|default_if_none:'' }}</textarea
+      >
+    </div>
+
+        <!-- Size -->
+        <div class="mb-3">
+          <label for="{{ form.size.id_for_label }}" class="form-label"
+            >{{ form.size.label }}</label
+          >
+          <input
+            type="number"
+            step="0.01"
+            class="form-control"
+            id="{{ form.size.id_for_label }}"
+            name="{{ form.size.name }}"
+            value="{{ form.size.value|default_if_none:'' }}"
+          />
+        </div>
+
+    <!-- Capacity -->
+    <div class="mb-3">
+      <label for="{{ form.capacity.id_for_label }}" class="form-label"
+        >{{ form.capacity.label }}</label
+      >
+      <input
+        type="number"
+        class="form-control"
+        id="{{ form.capacity.id_for_label }}"
+        name="{{ form.capacity.name }}"
+        value="{{ form.capacity.value|default_if_none:'' }}"
+      />
+    </div>
+
+    <!-- Price -->
+    <div class="mb-3">
+      <label for="{{ form.price.id_for_label }}" class="form-label"
+        >{{ form.price.label }}</label
+      >
+      <input
+        type="number"
+        class="form-control"
+        id="{{ form.price.id_for_label }}"
+        name="{{ form.price.name }}"
+        value="{{ form.price.value|default_if_none:'' }}"
+      />
+    </div>
+
+    <!-- Location Address -->
+    <div class="mb-3">
+      <label for="{{ form.location_address.id_for_label }}" class="form-label"
+        >{{ form.location_address.label }}</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="{{ form.location_address.id_for_label }}"
+        name="{{ form.location_address.name }}"
+        value="{{ form.location_address.value|default_if_none:'' }}"
+      />
+    </div>
+
+    <!-- Location City -->
+    <div class="mb-3">
+      <label for="{{ form.location_city.id_for_label }}" class="form-label"
+        >{{ form.location_city.label }}</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="{{ form.location_city.id_for_label }}"
+        name="{{ form.location_city.name }}"
+        value="{{ form.location_city.value|default_if_none:'' }}"
+      />
+    </div>
+
+    <!-- Postal Code -->
+    <div class="mb-3">
+      <label
+        for="{{ form.location_postal_code.id_for_label }}"
+        class="form-label"
+        >{{ form.location_postal_code.label }}</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="{{ form.location_postal_code.id_for_label }}"
+        name="{{ form.location_postal_code.name }}"
+        value="{{ form.location_postal_code.value|default_if_none:'' }}"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="{{ form.availability_start.id_for_label }}" class="form-label"
+        >{{ form.availability_start.label }}</label
+      >
+      <input
+        type="datetime-local"
+        class="form-control"
+        id="{{ form.availability_start.id_for_label }}"
+        name="{{ form.availability_start.name }}"
+        value="{{ form.availability_start.value|date:'Y-m-d\TH:i' }}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="{{ form.availability_end.id_for_label }}" class="form-label"
+        hidden>{{ form.availability_end.label }}</label
+      >
+      <input
+        type="datetime-local"
+        class="form-control"
+        id="{{ form.availability_end.id_for_label }}"
+        name="{{ form.availability_end.name }}"
+        value="{{ form.availability_end.value|date:'Y-m-d\TH:i' }}"
+        hidden
+      />
+    </div>
+    <!-- Facilities -->
+<div class="mb-3">
+  <label>{{ form.facilities.label }}</label>
+  {% for choice in form.facilities %}
+  <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="{{ choice.id_for_label }}"
+             name="{{ form.facilities.html_name }}" value="{{ choice.data.value }}"
+             {% if choice.data.value in form.facilities.value|default_if_none:'' %} checked {% endif %}>
+      <label class="form-check-label" for="{{ choice.id_for_label }}">{{ choice.data.label }}</label>
+  </div>
+  {% endfor %}
+</div>
+
+
+
+
+    <div class="mb-3 text-center">
+      <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

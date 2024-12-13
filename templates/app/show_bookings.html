@@ -1,0 +1,103 @@
+{% extends "base/base.html" %} {% block content %}
+<style>
+  .bgc {
+    background-color: #0c4a6e;
+  }
+  .custom-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    width: 85%;
+    margin: auto;
+  }
+
+  @media (max-width: 1600px) {
+    .custom-grid {
+      grid-template-columns: repeat(
+        3,
+        1fr
+      ); /* Three columns for smaller screens */
+    }
+  }
+  @media (max-width: 1200px) {
+    .custom-grid {
+      grid-template-columns: repeat(
+        2,
+        1fr
+      ); /* Two columns for medium screens */
+    }
+  }
+  @media (max-width: 768px) {
+    .custom-grid {
+      grid-template-columns: 1fr; /* One column for very small screens */
+    }
+  }
+</style>
+
+<div class="container">
+  <h4 class="text-center text-white">
+    {% comment %} Showing <span class="text-warning">{{ bookings|length }}</span> booking {% endcomment %}
+    Showing  booking information
+    <hr class="w-50 mx-auto" />
+  </h4>
+  <div class="">
+    {% if bookings %} {% for booking in bookings %}
+    <div
+      class="border border-0 border-warning shadow-lg rounded-3 px-3 py-1 bgc mb-3"
+      style="background-color: rgb(248, 255, 248)"
+    >
+      <h5 class="text-center mb-2 fst-italic">Booking Details</h5>
+      <hr />
+      <div class="">
+        {% comment %}
+        <p>
+          <span class="fw-bold" style="color: #ea580c">ID:</span>
+          {{booking.Identifier }}
+        </p>
+        {% endcomment %}
+        <p>
+          <span class="fw-bold" style="color: #ea580c">Details:</span>
+          {{booking.Description }}
+        </p>
+        <p>
+          <span class="fw-bold" style="color: #ea580c">Capacity:</span>
+          {{booking.Capacity }}
+        </p>
+        <p>
+          <span class="fw-bold" style="color: #ea580c">Price:</span>
+          {{booking.Price }}
+        </p>
+        <p>
+          <span class="fw-bold" style="color: #ea580c">Address:</span>
+          {{booking.Address }}
+        </p>
+        <p>
+          <span class="fw-bold" style="color: #ea580c">Postal Code:</span>
+          {{booking.Post }}
+        </p>
+        <p>
+          <span class="fw-bold" style="color: #ea580c">City:</span>
+          {{booking.City }}
+        </p>
+        {% comment %}
+        <p>
+          <span class="fw-bold" style="color: #ea580c">Created By:</span>
+          {{booking.Artist }}
+        </p>
+        {% endcomment %}
+       
+          <span class="fw-bold" style="color: #ea580c">From:</span>
+          {{booking.Start_Date}}
+        </p>
+        <p>
+          <span class="fw-bold" style="color: #ea580c">To:</span>
+          {{booking.End_Date}}
+      
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <p class="text-center text-white">No data could be fetched.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+<style>
+    .bgc {
+      background-color: #0c4a6e;
+    }
+    .custom-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: auto;
+      padding: 20px;
+      width: 85%;
+    }
+  
+    @media (max-width: 1600px) {
+      .custom-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 1200px) {
+      .custom-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .custom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  {% extends "base/base.html" %}
+{% block content %}
+<h4 class="text-center text-white">
+  Showing <span class="text-warning">{{ spaces_data|length }}</span> spaces 
+</h4>
+<hr class="w-50 mx-auto" />
+
+<div class="d-flex justify-content-center mx-5">
+  <div class="custom-grid my-5">
+    {% if spaces_data %}
+      {% for space in spaces_data %}
+        <div class="border border-0 border-warning shadow-lg rounded-3 p-5 position-relative bgc text-white">
+          <h3 class="mb-3">Space Details</h3>
+          {% comment %} <p><span class="fw-bold" style="color: #ea580c">ID:</span> {{ space.Space_ID }}</p> {% endcomment %}
+          <p><span class="fw-bold" style="color: #ea580c">Details:</span> {{ space.Space_Details }}</p>
+          <p><span class="fw-bold" style="color: #ea580c">Capacity:</span> {{ space.Capacity }} Persons</p>
+          <p><span class="fw-bold" style="color: #ea580c">Floor Size:</span> {{ space.Size }} m&sup2;</p>
+          <p><span class="fw-bold" style="color: #ea580c">Address:</span> {{ space.Address }}</p>
+          <p><span class="fw-bold" style="color: #ea580c">Post Code:</span> {{ space.Post }}</p>
+          <p><span class="fw-bold" style="color: #ea580c">City:</span> {{ space.City|title }}</p>
+          <p><span class="fw-bold" style="color: #ea580c">Price:</span> {{ space.Price }} Euro</p>
+          {% comment %} <p><span class="fw-bold" style="color: #ea580c">Created By:</span> {{ space.Created_By }}</p> {% endcomment %}
+          <p><span class="fw-bold" style="color: #ea580c">Available from:</span> {{ space.Start_Date }}</p>
+          <p hidden><span class="fw-bold" style="color: #ea580c">Availab to:</span> {{ space.End_Date }}</p>
+          {% comment %} <p><span class="fw-bold" style="color: #ea580c">Available:</span> {{ space.Available }}</p> {% endcomment %}
+          {% comment %} <p><span class="fw-bold" style="color: #ea580c">Trust Percentage:</span> {{ space.Trust_Percentage }}%</p> {% endcomment %}
+          {% if logged_in_username %}
+            {% if space.Created_By != logged_in_username %}
+              <a href="{% url 'book_space' space.UUID|slice:'5:' %}" class="btn btn-primary">Book</a>
+            {% else %}
+              <p>You are the owner of this space, you cannot book it.</p>
+            {% endif %}
+          {% else %}
+            {% comment %} <a href="{% url 'solid_login' %}?next={% url 'book_space' space.UUID|slice:'5:' %}" class="btn btn-primary">Book</a> {% endcomment %}
+            <a href="{% url 'solid_login' %}?next={% url 'show_all_data' %}" class="btn btn-primary">Book</a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-white text-center">No space data available.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+  

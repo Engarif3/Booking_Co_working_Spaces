@@ -1,0 +1,85 @@
+{% extends "base/base.html" %} {% block content %}
+<style>
+  .detail {
+    margin-bottom: 10px; /* Provides a bottom margin for each detail paragraph */
+  }
+  .detail strong {
+    color: #ea580c; /* Sets a distinctive color for labels */
+  }
+</style>
+
+<div class="container">
+  <div>
+    <h3 class="text-white p-5">Booking details overview</h3>
+
+    {% if space_details %}
+
+    <div
+      class="text-white border border-1 border-secondary rounded-2 p-4 shadow-lg"
+    >
+      {% comment %} <p class="detail">
+        <strong>Space ID:</strong> {{ space_details.Space_ID }}
+      </p> {% endcomment %}
+      <p class="detail">
+        <strong>Description:</strong> {{ space_details.Space_Details }}
+      </p>
+      <p class="detail">
+        <strong>Capacity:</strong> {{ space_details.Capacity }}
+      </p>
+      <p class="detail"><strong>Price:</strong> {{ space_details.Price }}</p>
+      <p class="detail">
+        <strong>Address:</strong> {{ space_details.address }}
+      </p>
+      <p class="detail">
+        <strong>Postal code:</strong> {{ space_details.postalCode }}
+      </p>
+      <p class="detail">
+        <strong>City:</strong> {{ space_details.addressLocality }}
+      </p>
+
+      <p class="detail">
+        <strong>Availability from:</strong> {{ space_details.startDate }}
+      </p>
+      <p class="detail" hidden>
+        <strong>Availability to:</strong> {{ space_details.endDate}}
+      </p>
+      <div class="d-flex justify-content-end">
+        <form action="{% url 'confirm_booking' uuid %}" method="post">
+          {% csrf_token %}
+          <div class="mb-2">
+            <label for="startDate" class="form-label">Choose your time:</label>
+            <input
+              type="datetime-local"
+              value="{{ space_details.startDate|date:'Y-m-d\TH:i' }}"
+              class="form-control"
+              id="startDate"
+              name="startDate"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="endDate" class="form-label">To:</label>
+            <input
+              type="datetime-local"
+              value="{{ space_details.startDate|date:'Y-m-d\TH:i' }}"
+              class="form-control"
+              id="endDate"
+              name="endDate"
+              required
+            />
+          </div>
+          
+          <button type="submit" class="btn btn-warning">Confirm</button>
+        </form>
+      </div>
+    </div>
+    {% else %}
+    <p>
+      Space details are not available. Please try again later or contact
+      support.
+    </p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

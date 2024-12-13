@@ -1,0 +1,12 @@
+{% extends "base/base.html" %} {% block content %}
+<div
+  class="text-white d-flex flex-column justify-content-center align-items-center"
+  style="min-height: 80vh"
+>
+  <h2>Space created successfully</h2>
+  <div class="d-flex gap-2">
+    <a href="{% url 'show_pod_data' %}"><button>show spaces</button></a>
+    <a href="{% url 'text_input_form' %}"><button>create again</button></a>
+  </div>
+</div>
+{% endblock %}

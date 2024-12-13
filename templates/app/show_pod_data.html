@@ -1,0 +1,309 @@
+<style>
+  .bg-custom-success {
+    background-color: #4d885b; /* A shade of green */
+  }
+
+  .bg-custom-primary {
+    background-color: #6e9ac9; /* A shade of blue */
+  }
+
+  .bg-custom-warning {
+    background-color: #94824c; /* A shade of yellow */
+  }
+
+  .bg-custom-danger {
+    background-color: #a86e74; /* A shade of red */
+  }
+
+  .bgc {
+    background-color: #0c4a6e;
+  }
+  .custom-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    width: 85%;
+    margin: auto;
+  }
+
+  /* Responsive adjustment for smaller screens */
+  @media (max-width: 1600px) {
+    .custom-grid {
+      grid-template-columns: repeat(3, 1fr); /* change to three columns */
+    }
+  }
+  @media (max-width: 1200px) {
+    .custom-grid {
+      grid-template-columns: repeat(2, 1fr); /* change to two columns */
+    }
+  }
+  @media (max-width: 768px) {
+    .custom-grid {
+      grid-template-columns: 1fr; /* change to one column */
+    }
+  }
+</style>
+
+{% extends "base/base.html" %} {% block content %}
+
+<h4 class="text-center text-white">
+  Showing <span class="text-warning">{{ spaces_data|length }}</span> spaces data
+  <hr class="w-50 mx-auto" />
+</h4>
+
+<div class="d-flex justify-content-center mx-5">
+  <div class="custom-grid my-5">
+    {% if spaces_data %} {% for space in spaces_data %}
+
+    <div
+      class="shadow-lg rounded-3 p-5 position-relative text-white {% if space.Trust_Percentage >= 85 %} bg-custom-success{% elif space.Trust_Percentage >= 70 %}bg-custom-primary{% elif space.Trust_Percentage >= 50 %}bg-custom-warning{% else %}bg-custom-danger{% endif %}"
+    >
+      <h5 class="text-center mb-2 fst-italic">Space Details</h5>
+      <hr />
+      <div class="mb-5">
+        <div>
+          <p>
+            <span class="fw-bold" >Trust Level:</span>
+            {% if space.Trust_Percentage >= 85 %} Fully Trusted {% elif space.Trust_Percentage >= 70 %} Mostly Trusted {% elif space.Trust_Percentage >= 50 %} Partially Trusted {% else %} Not
+            Trusted {% endif %}
+          </p>
+          {% comment %} <p>
+            <span class="fw-bold" 
+              >Trust Percentage:</span
+            >
+            {{space.Trust_Percentage}}
+          </p> {% endcomment %}
+        </div>
+        <p>
+          <span class="fw-bold" >ID:</span>
+          {{space.Space_ID}}
+        </p>
+        <p>
+          <span class="fw-bold" >Details:</span>
+          {{space.Space_Details}}
+        </p>
+        <p>
+          <span class="fw-bold" >Capacity:</span>
+          {{space.Capacity}}
+        </p>
+        <p>
+          <span class="fw-bold" >Price:</span>
+          {{space.Price}}
+        </p>
+        <p>
+          <span class="fw-bold" >Floor Size:</span>
+          {{space.Size}}
+        </p>
+        <p>
+          <span class="fw-bold" >Address:</span>
+          {{space.Address}}
+        </p>
+        <p>
+          <span class="fw-bold" >Post Code:</span>
+          {{space.Post}}
+        </p>
+        <p>
+          <span class="fw-bold" >City:</span>
+          {{space.Address_Locality}}
+        </p>
+        {% comment %}
+        <p>
+          <span class="fw-bold" >Created By:</span>
+          {{space.Creator}}
+        </p>
+        {% endcomment %}
+        <p>
+          <span class="fw-bold" >Available from:</span>
+          {{space.Start_Date}}
+        </p>
+        <p hidden>
+          <span class="fw-bold" >End Date:</span>
+          {{space.End_Date}}
+        </p>
+        <p>
+          <span class="fw-bold" >Availability:</span>
+          {{space.Available}}
+        </p>
+      </div>
+      <div
+        class="d-flex justify-content-end gap-3 mt-5 position-absolute bottom-0 end-0 me-2"
+      >
+        <!-- Trigger modal button -->
+        <p
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#updateModal{{ space.UUID }}"
+        >
+          Update
+        </p>
+        <!-- Deletion form -->
+        <form action="{% url 'delete_space' space.UUID %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="uuid" value="{{ space.UUID }}" />
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+      <!-- ============================ Modal for Updating Space ====================================================================== -->
+      <div
+        class="modal fade"
+        id="updateModal{{ space.UUID }}"
+        tabindex="-1"
+        aria-labelledby="updateModalLabel{{ space.UUID }}"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div
+            class="rounded-2 modal-content"
+            style="background-color: #0369a1"
+          >
+            <form method="post" action="{% url 'update_space' space.UUID %}">
+              {% csrf_token %}
+              <div class="modal-header">
+                <h5
+                  class="modal-title fst-italic"
+                  id="updateModalLabel{{ space.UUID }}"
+                >
+                  Update Space Details
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body fw-bolder" >
+                <input type="hidden" name="uuid" value="{{ space.UUID }}" />
+                <div>
+                  <label>Space ID:</label>
+                  <input
+                    type="text"
+                    name="space_id"
+                    value="{{space.Space_ID}}"
+                    class="form-control mb-1"
+                  />
+
+                  <label>Details:</label>
+                  <input
+                    type="text"
+                    name="space_details"
+                    value="{{space.Space_Details}}"
+                    class="form-control mb-1"
+                  />
+
+                  <label>Capacity:</label>
+                  <input
+                    type="number"
+                    name="capacity"
+                    value="{{space.Capacity}}"
+                    class="form-control mb-1"
+                  />
+
+                  <label>Price:</label>
+                  <input
+                    type="number"
+                    name="price"
+                    value="{{space.Price}}"
+                    class="form-control mb-1"
+                  />
+
+                  <input
+                    type="text"
+                    name="creator"
+                    value="{{space.Creator}}"
+                    class="form-control"
+                    hidden
+                  />
+
+                  <label>Available from:</label>
+                  <input
+                    type="datetime-local"
+                    name="start_date"
+                    value="{{space.Start_Date|date:'Y-m-d\TH:i'}}"
+                    class="form-control mb-1"
+                  />
+
+                  {% comment %} <label>End Date:</label> {% endcomment %}
+                  <input
+                    type="datetime-local"
+                    name="end_date"
+                    value="{{space.End_Date|date:'Y-m-d\TH:i'}}"
+                    class="form-control mb-1"
+                    hidden
+                  />
+
+                  <!-- Hidden field to ensure a value is sent when unchecked -->
+                  <div class="mb-3">
+                    <label>Size</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="size{{ space.UUID }}"
+                      name="size"
+                      value="{{ space.Size }}"
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="address{{ space.UUID }}" class="form-label"
+                      >Address</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="address{{ space.UUID }}"
+                      name="location_address"
+                      value="{{ space.Address }}"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="city{{ space.UUID }}" class="form-label"
+                      >City</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="city{{ space.UUID }}"
+                      name="location_city"
+                      value="{{ space.Address_Locality }}"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="postal{{ space.UUID }}" class="form-label"
+                      >Postal Code</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="postal{{ space.UUID }}"
+                      name="location_postal_code"
+                      value="{{ space.Post }}"
+                    />
+                  </div>
+                  <!-- Correct order in HTML to ensure hidden input is overridden by checkbox when checked -->
+                  <input type="hidden" name="checkbox" value="No" />
+                  <input type="checkbox" name="checkbox" value="Yes"
+                  id="availableCheckbox{{ space.UUID }}" class="form-check-input
+                  mt-1" {% if space.Available == "Yes" %}checked{% endif %}>
+                  <label for="availableCheckbox{{ space.UUID }}"
+                    >Available</label
+                  >
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-warning">Confirm</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <div class="d-flex justify-content-center" style="width: 100%">
+      <h2 class="text-white">No data could be fetched.</h2>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base/base.html' %} {% block content %}
+
+<div
+  class="container d-flex justify-content-center align-items-center"
+  style="min-height: 80vh"
+>
+  <div
+    class="d-flex justify-content-center align-items-center border border-1 border-primary-subtle p-5 rounded-3 w-50"
+  >
+    <form action="{% url 'solid_login' %}" method="POST" novalidate>
+      <h2 class="text-warning mb-5">Login with Solid</h2>
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}" />
+      <div class="">
+        <label for="username" class="form-label"></label>
+        <input
+          class="form-control"
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Enter username"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label"></label>
+        <input
+          class="form-control"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter password"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+      <p class="text-white pt-5">
+        Don't have an account?
+        <a href="https://solidcommunity.net/register"> register </a> here
+      </p>
+    </form>
+  </div>
+</div>
+{% endblock %}
